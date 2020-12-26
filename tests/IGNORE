@@ -1,8 +1,8 @@
 # This line is for emacs                         -*- mode: conf-space -*-
 
 # Tests for extension #1: String concatenations
-fail-concat.toy
-ok-concat.toy
+#fail-concat.toy
+#ok-concat.toy
 
 # Tests for extension #2:  +=, -= ...
 fail-plusplus.toy

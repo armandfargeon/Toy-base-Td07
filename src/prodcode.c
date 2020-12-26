@@ -186,7 +186,7 @@ void produce_code_expression(ast_node *node) {
         emit(", ");  code(EXPRESSION_OP2(node));
         emit(")");
       } else {
-        if(AST_TYPE(node) == string_type){
+        if(AST_TYPE(node) == string_type && strcmp(name,"+") == 0){
             emit("_toy_concat_string("); code(EXPRESSION_OP1(node));
             emit(", ");  code(EXPRESSION_OP2(node));
             emit(")");

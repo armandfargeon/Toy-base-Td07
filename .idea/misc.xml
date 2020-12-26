@@ -4,10 +4,11 @@
   <component name="MakefileSettings">
     <option name="linkedExternalProjectsSettings">
       <MakefileProjectSettings>
+        <option name="cleanTarget" value="all" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="C:\Users\user\Documents\Polytech SI4\Compilation\Toy-base-TD07\Toy-base-Td07" />
+            <option value="$PROJECT_DIR$" />
           </set>
         </option>
         <option name="version" value="2" />
