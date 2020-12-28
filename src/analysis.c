@@ -216,9 +216,17 @@ void analysis_expression(ast_node *node) {
                //   error_msg(node, "operands of %s must be numbers", name);
                 AST_TYPE(node) = (AST_TYPE(op1)== float_type ||
                                   AST_TYPE(op2) == float_type)? float_type: int_type;
-                else
-                    AST_TYPE(node) = string_type;
-                break;
+                else if(AST_TYPE(op1) == string_type && AST_TYPE(op2) == string_type) {
+                    if (strcmp(name, "+") == 0) {
+                        AST_TYPE(node) = string_type;
+                    } else {
+                        error_msg(node, "cannot use %s with string", name);
+                    }
+                }
+                else {
+                    error_msg(node, "string & number cannot work together");
+                }
+                    break;
               case blogic:
                 if (AST_TYPE(op1) != bool_type || AST_TYPE(op2) != bool_type)
                   error_msg(node, "operands of %s must be bool", name);

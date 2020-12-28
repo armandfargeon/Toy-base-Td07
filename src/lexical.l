@@ -67,6 +67,10 @@ floatnum        {floatnum1}|{floatnum2}
 "++"            return PP;
 "--"            return MM;
 "**"            return POW;
+"+="            return PE;
+"-="            return ME;
+"*="            return TE;
+"/="            return DE;
 
 "or"            return KOR;
 "and"           return KAND;

@@ -5,10 +5,10 @@
 #ok-concat.toy
 
 # Tests for extension #2:  +=, -= ...
-fail-plusplus.toy
-ok-plusequal1.toy
-ok-plusequal2.toy
-ok-plusequal3.toy
+#fail-plusplus.toy
+#ok-plusequal1.toy
+#ok-plusequal2.toy
+#ok-plusequal3.toy
 
 # Tests for extension #2: switch à la Go
 fail-switch.toy

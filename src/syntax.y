@@ -98,7 +98,7 @@ static int exit_compiler(int errors) {
 %nonassoc IFX
 %nonassoc KELSE
 
-%right '='
+%right '=' PE ME TE DE
 %right '?' ':'
 %left KOR
 %left KAND
@@ -202,6 +202,10 @@ expr:
         |       var                   { $$ = $1; }
         |       call                  { $$ = $1; }
         |       var '=' expr          { $$ = make_expression("=",  assign, 2, $1,$3);}
+        |       var PE expr          { $$ = make_expression("+=",  assign, 2, $1,$3);}
+        |       var ME expr          { $$ = make_expression("-=",  assign, 2, $1,$3);}
+        |       var TE expr          { $$ = make_expression("*=",  assign, 2, $1,$3);}
+        |       var DE expr          { $$ = make_expression("/=",  assign, 2, $1,$3);}
         |       '-' expr %prec UMINUS { $$ = make_expression("-",  uarith, 1, $2); }
         |       '+' expr %prec UMINUS { $$ = $2; }
         |       expr '+' expr         { $$ = make_expression("+",  barith, 2, $1,$3);}

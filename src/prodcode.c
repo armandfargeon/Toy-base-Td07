@@ -31,6 +31,7 @@
 #include "toy.h"
 #include "ast.h"
 #include "prodcode.h"
+#include "utils.h"
 
 FILE *fout;             ///< The file where code is emitted
 
@@ -186,10 +187,19 @@ void produce_code_expression(ast_node *node) {
         emit(", ");  code(EXPRESSION_OP2(node));
         emit(")");
       } else {
-        if(AST_TYPE(node) == string_type && strcmp(name,"+") == 0){
-            emit("_toy_concat_string("); code(EXPRESSION_OP1(node));
-            emit(", ");  code(EXPRESSION_OP2(node));
-            emit(")");
+        if(AST_TYPE(node) == string_type){
+            if(strcmp(name,"+") == 0) {
+                emit("_toy_concat_string(");
+                code(EXPRESSION_OP1(node));
+                emit(", ");
+                code(EXPRESSION_OP2(node));
+                emit(")");
+            }
+            else if (strcmp(name, "=") == 0) {
+                code(EXPRESSION_OP1(node));
+                emit(" %s ", name);
+                code_expr_cast(EXPRESSION_OP2(node));
+            }
         }
             // Simple binary operator on numbers
         else {

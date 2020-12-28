@@ -48,8 +48,7 @@ int _toy_powint(int a, int b) {         // function  and b should be unsigned
 }
 
 _toy_string _toy_concat_string(_toy_string str1, _toy_string str2){
-    if(str1 == NULL) str1 = "";
-    if(str2 == NULL) str2 = "";
+        if(str1 == NULL || str2 == NULL) return NULL;
         _toy_string res = malloc(strlen(str1) + strlen(str2) + 1);
         int i = 0;
         int m = 0;
