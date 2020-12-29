@@ -83,7 +83,7 @@ static int exit_compiler(int errors) {
 %token <float_value>  FLOAT
 %token <string_value> STRING
 %token <ident> IDENTIFIER
-%token KWHILE KIF KPRINT KRETURN KBREAK KFOR
+%token KWHILE KIF KPRINT KRETURN KBREAK KFOR KSWITCH KCASE KDEFAULT
 %token TINT TFLOAT TBOOL TSTRING TVOID
 
 
@@ -91,7 +91,8 @@ static int exit_compiler(int errors) {
 %type   <ast>   stmt expr var_decl type var call
 %type   <ast>   func_decl prototype expr_opt init_var
 %type   <ast>   for1 for2 for3
-%type   <lst>   fparam_list eparam_list stmt_list
+%type   <lst>   fparam_list eparam_list stmt_list cond_list
+%type   <ast> defcond
 
 
 
@@ -130,6 +131,8 @@ stmt:           ';'                     { $$ = make_expr_statement(NULL); }
         |       expr ';'                { $$ = make_expr_statement($1); }
         |       KPRINT '(' eparam_list ')' ';'
                                         { $$ = make_print_statement($3); }
+        |       KSWITCH '{' cond_list defcond '}'
+                                        { $$ = make_switch_statement($3, $4);}
         |       '{' stmt_list '}'       { $$ = make_block_statement($2); }
         |       KWHILE '(' expr ')' stmt
                                         { $$ = make_while_statement($3, $5); }
@@ -146,7 +149,14 @@ stmt:           ';'                     { $$ = make_expr_statement(NULL); }
         |       error ';'               { yyerrok; $$ = NULL; }
         ;
 
-
+cond_list:      cond_list KCASE expr ':' stmt { list_append($1, $3, FREE_NODE);
+                                                list_append($1, $5, FREE_NODE);
+                                                $$ = $1; }
+       |                    /* empty */ { $$ = list_create(); }
+       ;
+defcond :        KDEFAULT ':' stmt      { $$ = make_expr_statement($3); }
+       |        /* empty */             { $$ = make_expr_statement(NULL); }
+;
 stmt_list:      stmt_list stmt          { list_append($1, $2, FREE_NODE); $$ = $1; }
         |       /* empty */             { $$ = list_create();  }
         ;

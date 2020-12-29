@@ -431,6 +431,13 @@ void analysis_for_statement(ast_node *node) {
   leave_scope();
 }
 
+void analysis_switch_statement(ast_node *node){
+    struct s_switch_statement *n = (struct s_switch_statement *) node;
+    enter_scope();
+    list_for_each(n->cases, (list_iterator) analysis);
+    analysis(n->caseDefault);
+    leave_scope();
+}
 
 void analysis_block_statement(ast_node *node) {
   enter_scope();

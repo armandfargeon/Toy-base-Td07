@@ -82,6 +82,9 @@ floatnum        {floatnum1}|{floatnum2}
 "return"        return KRETURN;
 "break"         return KBREAK;
 "for"           return KFOR;
+"switch"        return KSWITCH;
+"case"          return KCASE;
+"default"       return KDEFAULT;
 
 "int"           return TINT;
 "float"         return TFLOAT;

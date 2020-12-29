@@ -308,6 +308,46 @@ void produce_code_for_statement(ast_node *node) {
   indent(-1); emit("}\n");
 }
 
+void produce_code_switch_statement(ast_node *node){
+    struct s_switch_statement *n = (struct s_switch_statement *) node;
+    int nbCases = list_size(n->cases);
+    int i = 0;
+    FORLIST(p, n->cases) {
+        if(nbCases % 2 == 0) {
+            indent(0);
+            if(i == 0) {
+                emit("if( ");
+                i = 1;
+            } else {
+                emit("else if(");
+            }
+        }
+        else {
+            indent(+1);
+        }
+        code(list_item_data(p));
+        if(nbCases % 2 == 0) {
+            emit(")\n {\n");
+        }
+        else
+            emit("\n}");
+        nbCases --;
+    }
+    if(n->caseDefault){
+        indent(0);
+        if(i == 1) {
+            emit("else {\n");
+            indent(+1);
+        }
+        code(n->caseDefault);
+        if(i == 1) {
+            indent(-1);
+            emit("}\n");
+        }
+    }
+
+}
+
 
 void produce_code_block_statement(ast_node *node) {
   struct s_block_statement *n = (struct s_block_statement *)node;

@@ -325,6 +325,21 @@ ast_node *make_for_statement(ast_node *for1, ast_node *for2, ast_node *for3,
   return (ast_node *) p;
 }
 
+
+/* ---- SWITCH ------------------------------------------------------------ */
+static void free_switch_statement(ast_node *node){
+    struct s_switch_statement *n = (struct s_switch_statement *)node;
+    list_for_each(n->cases, (list_iterator) free_node);
+    free_node(n->caseDefault);
+    free(node);
+}
+
+ast_node *make_switch_statement(List cases, ast_node *defcond){
+    DEF_AST(p, switch_statement, NULL);
+    p->cases = cases;
+    p->caseDefault = defcond;
+    return (ast_node *) p;
+}
 /* ---- BLOCK ------------------------------------------------------------ */
 static void free_block_statement(ast_node *node){
   struct s_block_statement *n = (struct s_block_statement *)node;
