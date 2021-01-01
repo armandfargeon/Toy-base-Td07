@@ -209,22 +209,25 @@ void analysis_expression(ast_node *node) {
 
             switch(EXPRESSION_KIND(node)) {
               case assign:
-                AST_TYPE(node)= AST_TYPE(op2);
+                  if (strcmp(name, "=")  != 0 && (!is_number(op1) || !is_number(op2))) {
+                      error_msg(node, "%s not defined on strings", name);
+                  } else {
+                      AST_TYPE(node) = AST_TYPE(op2);
+                  }
                 break;
               case barith:
-                if (is_number(op1) || is_number(op2))
-               //   error_msg(node, "operands of %s must be numbers", name);
+                if (is_number(op1) && is_number(op2))
                 AST_TYPE(node) = (AST_TYPE(op1)== float_type ||
                                   AST_TYPE(op2) == float_type)? float_type: int_type;
                 else if(AST_TYPE(op1) == string_type && AST_TYPE(op2) == string_type) {
                     if (strcmp(name, "+") == 0) {
                         AST_TYPE(node) = string_type;
                     } else {
-                        error_msg(node, "cannot use %s with string", name);
+                        error_msg(node, "operands of %s must be numbers", name);
                     }
                 }
                 else {
-                    error_msg(node, "string & number cannot work together");
+                    error_msg(node, "operands of %s must be numbers", name);
                 }
                     break;
               case blogic:
@@ -435,8 +438,29 @@ void analysis_switch_statement(ast_node *node){
     struct s_switch_statement *n = (struct s_switch_statement *) node;
     enter_scope();
     list_for_each(n->cases, (list_iterator) analysis);
+    int i = 0;
+    for (List_item p = list_head(n->cases); p; p = list_item_next(p)){
+        if(i%2 == 0){
+            if (list_item_data(p) && (AST_TYPE(list_item_data(p)) != bool_type))
+                error_msg(list_item_data(p), "condition must be boolean");
+        }
+        i++;
+    }
     analysis(n->caseDefault);
     leave_scope();
+}
+
+void analysis_exception_statement(ast_node *node){
+    struct s_exception_statement *n = (struct s_exception_statement *) node;
+    enter_scope();
+    analysis(n->try);
+    analysis(n->catch);
+    analysis(n->finally);
+    leave_scope();
+}
+
+void analysis_throw_statement(ast_node *node){
+
 }
 
 void analysis_block_statement(ast_node *node) {

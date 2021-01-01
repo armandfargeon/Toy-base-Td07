@@ -17,9 +17,9 @@
 #ok-switch3.toy
 
 # Tests for extension #3: try-catch
-fail-try.toy
-ok-try1.toy
-ok-try2.toy
-ok-try3.toy
-ok-try4.toy
-ok-try5.toy
+#fail-try.toy
+#ok-try1.toy
+#ok-try2.toy
+#ok-try3.toy
+#ok-try4.toy
+#ok-try5.toy

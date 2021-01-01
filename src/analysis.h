@@ -90,6 +90,8 @@ void analysis_print_statement(ast_node *node);
 void analysis_return_statement(ast_node *node);
 void analysis_break_statement(ast_node *node);
 void analysis_switch_statement(ast_node *node);
+void analysis_exception_statement(ast_node *node);
+void analysis_throw_statement(ast_node *node);
 
 // ======================================================================
 void analysis(ast_node *node);

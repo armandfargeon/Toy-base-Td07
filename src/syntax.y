@@ -83,7 +83,7 @@ static int exit_compiler(int errors) {
 %token <float_value>  FLOAT
 %token <string_value> STRING
 %token <ident> IDENTIFIER
-%token KWHILE KIF KPRINT KRETURN KBREAK KFOR KSWITCH KCASE KDEFAULT
+%token KWHILE KIF KPRINT KRETURN KBREAK KFOR KSWITCH KCASE KDEFAULT KTRY KCATCH KFINALLY KTHROW
 %token TINT TFLOAT TBOOL TSTRING TVOID
 
 
@@ -92,7 +92,8 @@ static int exit_compiler(int errors) {
 %type   <ast>   func_decl prototype expr_opt init_var
 %type   <ast>   for1 for2 for3
 %type   <lst>   fparam_list eparam_list stmt_list cond_list
-%type   <ast> defcond
+%type   <ast>   defcond
+%type   <ast>   catch finally
 
 
 
@@ -136,6 +137,7 @@ stmt:           ';'                     { $$ = make_expr_statement(NULL); }
         |       '{' stmt_list '}'       { $$ = make_block_statement($2); }
         |       KWHILE '(' expr ')' stmt
                                         { $$ = make_while_statement($3, $5); }
+        |       KTRY stmt catch finally  { $$ = make_exception_statement($2, $3, $4); }
         |       KFOR '(' for1 ';' for2 ';' for3 ')' stmt
                                         { $$ = make_for_statement($3, $5, $7, $9); }
         |       KRETURN expr_opt ';'    { $$ = make_return_statement($2); }
@@ -145,10 +147,17 @@ stmt:           ';'                     { $$ = make_expr_statement(NULL); }
         |       KIF '(' expr ')' stmt KELSE stmt
                                         { $$ = make_if_statement($3, $5, $7); }
         |       var_decl ';'            { $$ = $1;}
+        |       KTHROW ';'              { $$ = make_throw_statement(); }
         |       prototype ';'           { $$ = $1;}
         |       error ';'               { yyerrok; $$ = NULL; }
         ;
+catch:          KCATCH stmt                   { $$ = make_expr_statement($2); }
+        |       /* empty */                   { $$ = make_expr_statement(NULL); }
+        ;
 
+finally:        KFINALLY stmt                 { $$ = make_expr_statement($2); }
+        |       /* empty */                   { $$ = make_expr_statement(NULL); }
+        ;
 cond_list:      cond_list KCASE expr ':' stmt { list_append($1, $3, FREE_NODE);
                                                 list_append($1, $5, FREE_NODE);
                                                 $$ = $1; }

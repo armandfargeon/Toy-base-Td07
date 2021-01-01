@@ -95,5 +95,7 @@ void produce_code_print_statement(ast_node *node);
 void produce_code_return_statement(ast_node *node);
 void produce_code_break_statement(ast_node *node);
 void produce_code_switch_statement(ast_node *node);
+void produce_code_exception_statement(ast_node *node);
+void produce_code_throw_statement(ast_node *node);
 
 #endif /* _PRODCODE_H_ */

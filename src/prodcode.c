@@ -349,6 +349,29 @@ void produce_code_switch_statement(ast_node *node){
 }
 
 
+void produce_code_exception_statement(ast_node *node){
+    struct s_exception_statement *n = (struct s_exception_statement *) node;
+    emit("{\n");
+    emit("TRY {\n");
+    indent(+1);
+    code(n->try);
+    indent(-1);
+    emit("\n} CATCH {\n");
+    indent(+1);
+    code(n->catch);
+    indent(-1);
+    emit("} FINALLY {\n");
+    indent(+1);
+    code(n->finally);
+    indent(-1);
+    emit("\n}\nENDTRY;");
+    emit("\n}\n");
+}
+
+void produce_code_throw_statement(ast_node *node){
+    emit("\nTHROW;\n");
+}
+
 void produce_code_block_statement(ast_node *node) {
   struct s_block_statement *n = (struct s_block_statement *)node;
   int sz = list_size(n->statements);

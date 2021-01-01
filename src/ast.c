@@ -340,6 +340,31 @@ ast_node *make_switch_statement(List cases, ast_node *defcond){
     p->caseDefault = defcond;
     return (ast_node *) p;
 }
+/* ---- EXCEPTION ------------------------------------------------------------ */
+static void free_exception_statement(ast_node *node){
+    struct s_exception_statement *n = (struct s_exception_statement *)node;
+    free_node(n->try);
+    free_node(n->catch);
+    free_node(n->finally);
+    free(node);
+}
+
+ast_node *make_exception_statement(ast_node* try, ast_node* catch, ast_node* finally){
+    DEF_AST(p, exception_statement, NULL);
+    p->try = try;
+    p->catch = catch;
+    p->finally = finally;
+    return (ast_node *) p;
+}
+/* ---- THROW ------------------------------------------------------------ */
+static void free_throw_statement(ast_node *node){
+    free(node);
+}
+
+ast_node *make_throw_statement(void){
+    DEF_AST(p, throw_statement, NULL);
+    return (ast_node *) p;
+}
 /* ---- BLOCK ------------------------------------------------------------ */
 static void free_block_statement(ast_node *node){
   struct s_block_statement *n = (struct s_block_statement *)node;

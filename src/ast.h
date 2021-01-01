@@ -35,7 +35,7 @@ enum node_kind {k_constant, k_identifier, k_type, k_var_decl, k_expression,
                 k_call, k_function, k_parameter_list,
                 k_if_statement, k_while_statement, k_for_statement,
                 k_block_statement, k_expr_statement, k_print_statement,
-                k_return_statement, k_break_statement,k_switch_statement};
+                k_return_statement, k_break_statement,k_switch_statement, k_exception_statement, k_throw_statement};
 
 typedef struct ast_node ast_node;
 
@@ -250,6 +250,23 @@ struct s_switch_statement {
 
 
 ast_node *make_switch_statement(List cases, ast_node *defcond);
+
+/* ---- EXCEPTION ------------------------------------------------------------ */
+struct s_exception_statement {
+    ast_node header;              ///< AST header
+    ast_node *try;
+    ast_node *catch;
+    ast_node *finally;
+};
+
+ast_node *make_exception_statement(ast_node *try, ast_node *catch, ast_node *finally);
+
+/* ---- THROW ------------------------------------------------------------ */
+struct s_throw_statement {
+    ast_node header;              ///< AST header
+};
+
+ast_node *make_throw_statement(void);
 
 /* ---- BLOCK ------------------------------------------------------------ */
 struct s_block_statement {
